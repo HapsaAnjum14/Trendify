@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+<style>
+body{
+    font-family: Arial, sans-serif;
+    /*background-color: #ac7373;*/
+    background-image: url(images/loginbackground.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: centre;
+    height: 74vh;
+    margin-top: 100px;
+    margin-bottom: 10px;
+}
+.registration-container{
+    background: #fff;
+    padding: 20px;
+    border-radius: 25px;
+    /*box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    background-color: rgba(0,0,0,0.5);*/
+    background-color: rgb(255, 255, 255,0.5);
+    /*opacity: 0.5;*/
+    box-shadow: inset -5px -5px rgba(0,0,0,0.5);
+    width: 300px;
+    
+}
+.registration-container h2{
+    text-align: center;
+    margin-bottom: 30px;
+    color: black;
+}
+.form-fields{
+    margin-bottom: 15px;
+}
+.form-fields label{
+    font-size: 20px;
+    margin-bottom: 5px;
+    display: block;
+    color: black;
+}
+.form-fields input{
+    width: 100% ;
+    padding: 8px;
+    font-size: 15px;
+    border: 1px solid #352a2a;
+    border-radius: 5px;
+}
+.form-fields input:focus{
+    outline: none;
+    border-color: black;
+}
+.submit-btn{
+    width: 100%;
+    padding: 10px;
+    background-color:  rgb(227, 148, 79);
+    color: #fff;
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+}
+.submit-btn:hover{
+    background-color: rgb(143, 93, 49);
+}
+.form-fields a{
+    margin-top: 10px;
+    text-align: center;
+    display: block;
+    font-size: 20px;
+    text-decoration: none;
+    color: black;
+}
+.form-fields a:hover{
+    text-decoration: underline;
+}
+
+</style>
+</head>
+<body>
+    <div class="registration-container">
+        <h2>Registration Form</h2>
+        <form action="proj.html">
+            <div class="form-fields" method="POST">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" placeholder="Enter Your Full Name" required>
+            </div>
+           <div class="form-fields">
+            <label for="email">Email Address</label>
+            <input type="text" id="email" placeholder="Enter Your mail" required>
+           </div>
+           <div class="form-fields">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter Your Password" required>
+           </div>
+           <button type="submit" class="submit-btn">Register</button>
+           <div class="form-fields">
+            <a href="login.html">Already Have An Account ? Login</a>
+           </div>
+        </form>
+    </div>
+</body> 
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

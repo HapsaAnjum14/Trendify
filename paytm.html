@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Payment Page</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- Toastr CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+        <!-- Toastr JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f2f2f2;
+                margin: 0;
+                padding: 20px;
+              }
+              
+              .payment-container {
+                display: flex;
+                flex-wrap: wrap;
+                max-width: 1000px;
+                margin: auto;
+                background: #fff;
+                border-radius: 12px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                overflow: hidden;
+              }
+              
+              .payment-methods {
+                flex: 1;
+                min-width: 200px;
+                background-color: #fff;
+                padding: 20px;
+                border-right: 1px solid #ddd;
+              }
+              
+              .payment-methods ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+              }
+              
+              .payment-methods li {
+                cursor: pointer;
+                padding: 12px;
+                display: flex;
+                align-items: center;
+                font-weight: 500;
+                border-radius: 6px;
+                transition: background-color 0.2s ease;
+              }
+              
+              .payment-methods li img {
+                margin-right: 10px;
+              }
+              
+              .payment-methods li:hover {
+                background-color: #e0e0e0;
+              }
+              
+              .payment-methods li.active {
+                background-color: #d1ffd6;
+                color: #00a651;
+                font-weight: bold;
+              }
+              
+              .card-details {
+                flex: 2;
+                padding: 20px;
+                background-color: #ffffff;
+              }
+              
+              .card-details label {
+                display: block;
+                margin-top: 15px;
+                font-weight: 500;
+              }
+              
+              .card-details input {
+                width: 100%;
+                padding: 10px;
+                margin-top: 5px;
+                border-radius: 6px;
+                border: 1px solid #ccc;
+                box-sizing: border-box;
+              }
+              
+              .inline-inputs {
+                display: flex;
+                justify-content: space-between;
+                gap: 10px;
+              }
+              
+              .inline-inputs > div {
+                flex: 1;
+              }
+              
+              button {
+                margin-top: 20px;
+                background-color: #00a651;
+                color: white;
+                padding: 12px 18px;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: bold;
+                width: 100%;
+                transition: background-color 0.3s ease;
+              }
+              
+              button:hover {
+                background-color: #00904e;
+              }
+              
+              .payment-section {
+                display: none;
+              }
+              
+              .payment-section.active {
+                display: block;
+              }
+              
+              .card-icons {
+                margin-top: 15px;
+                text-align: center;
+              }
+              
+              .card-icons img {
+                margin: 5px;
+                width: 48px;
+                height: auto;
+              }
+              
+              .order-summary {
+                flex: 1;
+                min-width: 250px;
+                padding: 20px;
+                background-color: #fff;
+                border-left: 1px solid #ddd;
+              }
+              
+              .order-summary h3 {
+                margin-top: 0;
+              }
+              
+              .order-summary p {
+                margin-bottom: 10px;
+              }
+              
+        </style>
+
+    </head>
+    <body>
+        <div class="payment-container">
+          <div class="payment-methods">
+            <h3 style="border-bottom: 2px solid lightgray; padding-bottom: 20px;">Payment methods</h3>
+            <ul>
+              <li class="active" onclick="showPayment('card')">
+                <img src="https://img.icons8.com/ios-filled/24/00cc00/bank-card-front-side.png" />
+                Payment by card
+              </li>
+              <li onclick="showPayment('upi')">
+                <img src="https://img.icons8.com/color/48/google-pay.png" alt="Google Pay" height="24" />
+                Payment by UPI
+              </li>
+            </ul>
+          </div>
+      
+          <div class="card-details">
+            <!-- Card icons at top -->
+            <div id="cardIconsTop" class="card-icons" style="border-bottom: 2px solid lightgray; padding-bottom: 5px; text-align: center;">
+                <img src="https://img.icons8.com/color/48/visa.png" />
+                <img src="https://img.icons8.com/color/48/mastercard.png" />
+                <img src="https://img.icons8.com/color/48/amex.png" />
+                <img src="https://img.icons8.com/color/48/discover.png" />
+            </div>
+            
+            <!-- UPI icons at top (hidden by default) -->
+            <div id="upiIconsTop" class="card-icons" style="display: none; border-bottom: 2px solid lightgray; padding-bottom: 5px; text-align: center;">
+                <img src="data:image/png;base64,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" />
+                <img src="https://img.icons8.com/color/48/google-pay.png" />
+                
+                <img src="https://img.icons8.com/color/48/paytm.png" />
+                <img src="https://img.icons8.com/color/48/bhim.png" />
+            </div>
+      
+            <!-- Card Section -->
+            <form id="cardSection" class="payment-section active">
+              <label>Full Name</label>
+              <input type="text" placeholder="Enter full name" id="email" />
+              <label>Card number</label>
+              <input type="text" placeholder="Card number" id="cardNumber" />
+              <div class="inline-inputs" style="margin-top: 10px;">
+                <div>
+                  <label>Expiry date</label>
+                  <input style="margin-top: 5px;" type="text" placeholder="MM/YY" id="expiryDate" />
+                </div>
+                <div>
+                  <label>CVV</label>
+                  <input style="margin-top: 5px;" type="text" placeholder="CVV" id="cvv" />
+                </div>
+              </div>
+              <button type="button" onclick="submitPayment()">PAY NOW</button>
+            </form>
+      
+            <!-- UPI Section -->
+            <form id="upiSection" class="payment-section" style="display: none;">
+              <label>UPI ID</label>
+              <input type="text" placeholder="example@upi" id="upiId" />
+              <label>Name</label>
+              <input type="text" placeholder="Enter full name" id="upiName" />
+              <button type="button" onclick="submitUPIPayment()">PAY NOW</button>
+            </form>
+          </div>
+      
+          <div class="order-summary">
+            <h3 style="border-bottom: 2px solid lightgray; padding-bottom: 20px;">Order information</h3>
+            <p><strong>Order description</strong><br />Test payment</p>
+            <!-- Card icons at top -->
+                <div id="upiIconsOrder" class="card-icons" style="display: none; border-bottom: 2px solid lightgray; padding-bottom: 5px; text-align: center;">
+                    <img src="data:image/png;base64,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" />
+                    <img src="https://img.icons8.com/color/48/google-pay.png" />
+                    <!-- <img src="https://img.icons8.com/color/48/phonepe.png" /> -->
+                    <img src="https://img.icons8.com/color/48/paytm.png" />
+                    <img src="https://img.icons8.com/color/48/bhim.png" />
+                </div>
+                <div id="cardIconsOrder" class="card-icons" style="border-bottom: 2px solid lightgray; padding-bottom: 5px; text-align: center;">
+                    <img src="https://img.icons8.com/color/48/visa.png" />
+                    <img src="https://img.icons8.com/color/48/mastercard.png" />
+                    <img src="https://img.icons8.com/color/48/amex.png" />
+                    <img src="https://img.icons8.com/color/48/discover.png" />
+                </div>
+                
+                <!-- UPI icons at top (hidden by default) -->
+                
+          </div>
+        </div>
+      
+        <script>
+            toastr.options = {
+                closeButton: false,
+                progressBar: true,
+                positionClass: "toast-top-center",
+                timeOut: "3000"
+            };
+      
+          function showPayment(method) {
+            document.querySelectorAll(".payment-methods li").forEach(li => li.classList.remove("active"));
+            document.querySelectorAll(".payment-section").forEach(sec => sec.style.display = "none");
+          
+            if (method === "card") {
+              document.querySelectorAll(".payment-methods li")[0].classList.add("active");
+              document.getElementById("cardSection").style.display = "block";
+          
+              // Toggle top icons
+              document.getElementById("cardIconsTop").style.display = "block";
+              document.getElementById("upiIconsTop").style.display = "none";
+          
+              // Toggle right side icons
+              document.getElementById("cardIconsOrder").style.display = "block";
+              document.getElementById("upiIconsOrder").style.display = "none";
+            } else {
+              document.querySelectorAll(".payment-methods li")[1].classList.add("active");
+              document.getElementById("upiSection").style.display = "block";
+          
+              // Toggle top icons
+              document.getElementById("cardIconsTop").style.display = "none";
+              document.getElementById("upiIconsTop").style.display = "block";
+          
+              // Toggle right side icons
+              document.getElementById("cardIconsOrder").style.display = "none";
+              document.getElementById("upiIconsOrder").style.display = "block";
+            }
+          }
+          
+          function submitPayment() {
+            const cardNumber = document.getElementById("cardNumber").value.trim();
+            const expiryDate = document.getElementById("expiryDate").value.trim();
+            const cvv = document.getElementById("cvv").value.trim();
+            const email = document.getElementById("email").value.trim();
+      
+            if (!cardNumber || !expiryDate || !cvv || !email) {
+              toastr.error("Please fill all fields!");
+              return;
+            }
+      
+            toastr.success("Card payment successful! Thank you.");
+            document.getElementById("cardSection").reset();
+          }
+      
+          function submitUPIPayment() {
+            const upiId = document.getElementById("upiId").value.trim();
+            const upiName = document.getElementById("upiName").value.trim();
+      
+            if (!upiId || !upiName) {
+              toastr.error("Please fill all UPI details!");
+              return;
+            }
+      
+            toastr.success("UPI payment successful! Thank you.");
+            document.getElementById("upiSection").reset();
+          }
+        </script>
+      </body>
+      
+</html>

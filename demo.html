@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link href="style2.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="login-container" id="login-container">
+        <h2>Login Form</h2>
+        <form action="index.html" method="POST" id="login-form">
+           <div class="form-fields">
+            <label for="email">Email Address</label>
+            <input type="text" id="email" placeholder="Enter Your mail" required>
+           </div>
+           <div class="form-fields">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter Your Password" required>
+           </div>
+           <button type="submit" class="submit-btn">Login</button>
+           <div class="form-fields">
+            <a href="regis.html">Don't Have An Account ? Register</a>
+           </div>
+           </form>
+           <div class="message" id="login-message">
+           </div>
+    </div>
+    <div class="login-container" id="otp-container" style="display: none;">
+        <h2>Verify OTP</h2>
+        <form id="otp-form">
+            <div class="form-fields">
+                <label for="otp">Enter OTP</label>
+                <input type="text" id="otp" placeholder="Enter the otp sent to your mail" required>
+            </div>
+            <button type="submit" class="submit-btn">Verify OTP</button>
+        </form>
+        <div class="message" id="otp-message">
+        </div>
+    </div>
+    <script>
+        const loginForm = document.getElementById('login-form');
+const otpForm = document.getElementById('otp-form');
+const loginContainer = document.getElementById('login-container');
+const otpContainer = document.getElementById('otp-container');
+const loginMessage = document.getElementById('login-message');
+const otpMessage = document.getElementById('otp-message');
+let generatedOtp = '';
+
+loginForm.addEventListener('submit', function(event) {
+    event.preventDefault(); 
+    
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    
+    // Perform basic email validation
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailPattern.test(email)) {
+        loginMessage.textContent = 'Please enter a valid email address.';
+        loginMessage.style.color = 'red';
+        return;
+    }
+    
+    // You can optionally validate the password format here if needed
+    if (password.length < 6) {
+        loginMessage.textContent = 'Password must be at least 6 characters long.';
+        loginMessage.style.color = 'red';
+        return;
+    }
+
+    // Generate OTP and show success message
+    generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    loginMessage.textContent = 'Login successful. OTP sent to your mail.';
+    loginMessage.style.color = 'green';
+    console.log('Generated OTP: ', generatedOtp);
+
+    loginContainer.style.display = 'none';
+    otpContainer.style.display = 'block';
+});
+
+        otpForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const enteredOTP = document.getElementById('otp').value;
+    if(enteredOTP === generatedOtp) {
+        otpMessage.textContent = 'OTP verified successfully: welcome';
+        otpMessage.style.color = 'green';
+        // Redirect to proj.html after successful OTP verification
+        window.location.href = 'proj.html';
+    }
+    else {
+        otpMessage.textContent = 'Invalid OTP. Please try again later';
+        otpMessage.style.color = 'red';
+    }
+});
+
+    </script>
+</body>
+</html>
